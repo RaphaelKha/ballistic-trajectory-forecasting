@@ -95,6 +95,8 @@ To prevent the network from predicting erratic paths, we calculate the predicted
 
 $$\mathcal{L}_{\text{acc}}=\mathbb{E}[\|a_t\|_2^2]$$
 
+![<img width="1383" height="847" alt="thumbnail_hud" src="https://github.com/RaphaelKha/ballistic-trajectory-forecasting/blob/main/fitting_loss_settings.png?raw=true"
+
 **Final Objective:**
 
 $$\mathcal{L}_{\text{total}}=\mathcal{L}_{\text{traj}}+\mathcal{L}_{\text{terminal}}+\lambda_{\text{acc}}\mathcal{L}_{\text{acc}}$$
