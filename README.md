@@ -12,12 +12,8 @@ To provide our neural network with pure, unbroken sequential data, we implemente
 1. **Kinematic Prior:** We model the physical inertia of each target using principles derived from the Kalman Filter, predicting where a projectile *should* be based on its velocity.
 2. **Global Optimization:** We resolve crossing trajectories using the Hungarian (Kuhn-Munkres) algorithm. By minimizing the global assignment cost matrix rather than making localized greedy choices, the system perfectly maintains target identities even in dense clusters.
 
-
-![Tracking Demonstration](<img width="1497" height="932" alt="thumbnail_tracking" src="https://github.com/user-attachments/assets/9a0bd1eb-ddc2-409d-ab85-327d84004ce4" />)
-
+![Tracking Demonstration](https://github.com/user-attachments/assets/9a0bd1eb-ddc2-409d-ab85-327d84004ce4)
 *Notice the `TGT-X` labels: even as multiple projectiles densely cross paths in the center of the screen, the Hungarian assignment matrix ensures 0 identity switches and 0 track fragmentation.*
-
-*Notice the `TGT-X` labels: even as multiple projectiles densely cross paths in the center of the screen, the Hungarian assignment matrix ensures 0 identity switches and 0 track fragmentation. (Click image to play video)*
 
 ---
 
@@ -95,24 +91,20 @@ To prevent the network from predicting erratic paths, we calculate the predicted
 
 $$\mathcal{L}_{\text{acc}}=\mathbb{E}[\|a_t\|_2^2]$$
 
-![thumbnail_hud](https://github.com/RaphaelKha/ballistic-trajectory-forecasting/blob/main/fitting_loss_settings.png?raw=true)
-
-
-
-To prove these aren't just pretty equations, let's look at the training dynamics. The model rapidly breaches the critical threshold, settling at an impressive 0.49 px error rate:
-
-
-
 **Final Objective:**
 
 $$\mathcal{L}_{\text{total}}=\mathcal{L}_{\text{traj}}+\mathcal{L}_{\text{terminal}}+\lambda_{\text{acc}}\mathcal{L}_{\text{acc}}$$
 
-![<img width="1383" height="847" alt="thumbnail_hud" src="https://github.com/user-attachments/assets/0fafebe3-65e6-42f2-a339-fdff330c871d" />](https://github.com/RaphaelKha/ballistic-trajectory-forecasting/blob/main/thumbnail_hud.png?raw=true)
+**4.4 Quantitative Convergence & Sub-Pixel Accuracy**
+To prove these aren't just pretty equations, let's look at the training dynamics. The model rapidly breaches the critical threshold, settling at an impressive 0.49 px error rate:
 
+![Training Loss and Accuracy](https://github.com/RaphaelKha/ballistic-trajectory-forecasting/blob/main/fitting_loss_settings.png?raw=true)
+*Training metrics over 400 epochs. Left: The logarithmic descent of the Sniper Horizon Loss. Right: The terminal impact error converging below the sub-pixel threshold.*
 
+**4.5 Qualitative Demonstration (Real-Time HUD)**
+
+![Full HUD System](https://github.com/RaphaelKha/ballistic-trajectory-forecasting/blob/main/thumbnail_hud.png?raw=true)
 *The ultimate demonstration. The AI successfully retro-engineers the underlying physical laws, yielding sub-pixel forecasting accuracy and projecting reliable "Lead Indicators" (Blue/Red targets) for 40+ simultaneous projectiles.*
-
-*The ultimate demonstration. The AI successfully retro-engineers the underlying physical laws, yielding sub-pixel forecasting accuracy and projecting reliable "Lead Indicators" (Blue/Red targets) for 40+ simultaneous projectiles. (Click image to play video)*
 
 ---
 
@@ -122,6 +114,6 @@ By embedding kinematic constraints directly into the loss landscape and utilizin
 ---
 
 ### Copyright & License
-© 2026 Raphael K. All Rights Reserved.
+© 2026 Raphael KHAYAT. All Rights Reserved.
 
 *This repository and its documentation are provided for portfolio and demonstration purposes only. To protect intellectual property, the source code, training pipeline, and model weights are maintained in a separate private repository. A full code walkthrough and live demonstration can be provided upon request during technical interviews. No license is granted to use, copy, modify, or distribute this software.*
