@@ -122,6 +122,6 @@ By embedding kinematic constraints directly into the loss landscape and utilizin
 ---
 
 ### Copyright & License
-© 2026 Raphael KHAYAT. All Rights Reserved.
+© 2026 Raphael K. All Rights Reserved.
 
 *This repository and its documentation are provided for portfolio and demonstration purposes only. To protect intellectual property, the source code, training pipeline, and model weights are maintained in a separate private repository. A full code walkthrough and live demonstration can be provided upon request during technical interviews. No license is granted to use, copy, modify, or distribute this software.*
