@@ -99,7 +99,7 @@ $$\mathcal{L}_{\text{acc}}=\mathbb{E}[\|a_t\|_2^2]$$
 
 
 
-
+To prove these aren't just pretty equations, let's look at the training dynamics. The model rapidly breaches the critical threshold, settling at an impressive 0.49 px error rate:
 
 
 
