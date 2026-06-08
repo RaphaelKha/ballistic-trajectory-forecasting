@@ -12,7 +12,9 @@ To provide our neural network with pure, unbroken sequential data, we implemente
 1. **Kinematic Prior:** We model the physical inertia of each target using principles derived from the Kalman Filter, predicting where a projectile *should* be based on its velocity.
 2. **Global Optimization:** We resolve crossing trajectories using the Hungarian (Kuhn-Munkres) algorithm. By minimizing the global assignment cost matrix rather than making localized greedy choices, the system perfectly maintains target identities even in dense clusters.
 
-[![Tracking Demo](https://raw.githubusercontent.com/RaphaelKha/ballistic-trajectory-forecasting/main/thumbnail_tracking.png)](https://github.com/user-attachments/assets/e51d8afc-254c-4141-bda0-33e45940fbdb)
+![Tracking Demonstration](tracking_demo.png)
+*Notice the `TGT-X` labels: even as multiple projectiles densely cross paths in the center of the screen, the Hungarian assignment matrix ensures 0 identity switches and 0 track fragmentation.*
+
 *Notice the `TGT-X` labels: even as multiple projectiles densely cross paths in the center of the screen, the Hungarian assignment matrix ensures 0 identity switches and 0 track fragmentation. (Click image to play video)*
 
 ---
@@ -61,19 +63,13 @@ The final hidden state $h_T$ acts as a compressed "kinematic memory," encoding t
 For the forecasting phase, the model operates autoregressively over the prediction horizon $N=30$. At each future timestep, the network utilizes the evolving hidden state to predict a positional delta $\Delta\hat{p}$. This delta is added to the previous position, allowing the network to dynamically construct the non-linear parabolic curve step-by-step. 
 
 **Architecture Data Flow:**
-> `[Absolute Sequence 30x2]` 
-> ⬇
-> `[Relative Centering: p_t - p_30]`
-> ⬇
-> `[Linear Projection Layer: 2 → 256]`
-> ⬇
-> `[GRU Encoder Cell]` ➔ *(Yields Final Kinematic State h_30)*
-> ⬇
-> `[Autoregressive Decoder]` ➔ *(Loops 30x to predict Deltas)*
-> ⬇
-> `[Absolute Re-anchoring]`
-> ⬇
-> `[Output: Future Trajectory 30x2]`
+1. 📥 **Input:** `[Absolute Sequence 30x2]`
+2. 🎯 **Preprocessing:** `[Relative Centering: p_t - p_30]`
+3. 🧠 **Embedding:** `[Linear Projection Layer: 2 → 256]`
+4. ⚙️ **Encoding:** `[GRU Encoder Cell]` ➔ *(Yields Final Kinematic State h_30)*
+5. 🔄 **Decoding:** `[Autoregressive Decoder]` ➔ *(Loops 30x to predict Deltas)*
+6. 🌍 **Postprocessing:** `[Absolute Re-anchoring]`
+7. 📤 **Output:** `[Future Trajectory 30x2]`
 
 ---
 
@@ -101,7 +97,9 @@ $$\mathcal{L}_{\text{acc}}=\mathbb{E}[\|a_t\|_2^2]$$
 
 $$\mathcal{L}_{\text{total}}=\mathcal{L}_{\text{traj}}+\mathcal{L}_{\text{terminal}}+\lambda_{\text{acc}}\mathcal{L}_{\text{acc}}$$
 
-[![Full HUD Demo](https://raw.githubusercontent.com/RaphaelKha/ballistic-trajectory-forecasting/main/thumbnail_hud.png)](https://github.com/user-attachments/assets/f32a3b89-02a1-4912-a816-164cd364745d)
+![Full HUD System](hud_demo.png)
+*The ultimate demonstration. The AI successfully retro-engineers the underlying physical laws, yielding sub-pixel forecasting accuracy and projecting reliable "Lead Indicators" (Blue/Red targets) for 40+ simultaneous projectiles.*
+
 *The ultimate demonstration. The AI successfully retro-engineers the underlying physical laws, yielding sub-pixel forecasting accuracy and projecting reliable "Lead Indicators" (Blue/Red targets) for 40+ simultaneous projectiles. (Click image to play video)*
 
 ---
