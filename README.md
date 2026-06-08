@@ -12,7 +12,9 @@ To provide our neural network with pure, unbroken sequential data, we implemente
 1. **Kinematic Prior:** We model the physical inertia of each target using principles derived from the Kalman Filter, predicting where a projectile *should* be based on its velocity.
 2. **Global Optimization:** We resolve crossing trajectories using the Hungarian (Kuhn-Munkres) algorithm. By minimizing the global assignment cost matrix rather than making localized greedy choices, the system perfectly maintains target identities even in dense clusters.
 
-![Tracking Demonstration](tracking_demo.png)
+
+![Tracking Demonstration](<img width="1497" height="932" alt="thumbnail_tracking" src="https://github.com/user-attachments/assets/9a0bd1eb-ddc2-409d-ab85-327d84004ce4" />)
+
 *Notice the `TGT-X` labels: even as multiple projectiles densely cross paths in the center of the screen, the Hungarian assignment matrix ensures 0 identity switches and 0 track fragmentation.*
 
 *Notice the `TGT-X` labels: even as multiple projectiles densely cross paths in the center of the screen, the Hungarian assignment matrix ensures 0 identity switches and 0 track fragmentation. (Click image to play video)*
@@ -97,7 +99,9 @@ $$\mathcal{L}_{\text{acc}}=\mathbb{E}[\|a_t\|_2^2]$$
 
 $$\mathcal{L}_{\text{total}}=\mathcal{L}_{\text{traj}}+\mathcal{L}_{\text{terminal}}+\lambda_{\text{acc}}\mathcal{L}_{\text{acc}}$$
 
-![Full HUD System](hud_demo.png)
+![Full HUD System](<img width="1383" height="847" alt="thumbnail_hud" src="https://github.com/user-attachments/assets/0fafebe3-65e6-42f2-a339-fdff330c871d" />)
+
+
 *The ultimate demonstration. The AI successfully retro-engineers the underlying physical laws, yielding sub-pixel forecasting accuracy and projecting reliable "Lead Indicators" (Blue/Red targets) for 40+ simultaneous projectiles.*
 
 *The ultimate demonstration. The AI successfully retro-engineers the underlying physical laws, yielding sub-pixel forecasting accuracy and projecting reliable "Lead Indicators" (Blue/Red targets) for 40+ simultaneous projectiles. (Click image to play video)*
