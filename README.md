@@ -1,36 +1,35 @@
-# Physics-Informed Deep Learning for Multi-Target Ballistic Trajectory Forecasting
+# Ballistic Trajectory Forecasting System
 
 ### Abstract
-This article details the architecture of a real-time predictive tracking system designed for dense, multi-target ballistic environments. We combine robust synthetic data generation, spatial invariance, and a physics-informed loss function to achieve sub-pixel forecasting accuracy and eliminate identity switches during target occlusion.
+This project presents a real-time predictive tracking system for dense, multi-target environments. It integrates Sequence-to-Sequence (Seq2Seq) neural networks with Hungarian-based kinematic assignment to ensure sub-pixel accuracy and stable target identification.
 
 ---
 
-### 1. The Tracking Engine: Hungarian Assignment
-To provide our neural network with pure, unbroken sequential data, we implemented a Simple Online and Realtime Tracking (SORT) framework. We resolve crossing trajectories using the Hungarian algorithm, ensuring 0 identity switches.
+### 1. The Tracking Framework
+The system uses the Hungarian (Kuhn-Munkres) algorithm for global assignment. This eliminates track fragmentation during projectile crossings.
+* **Kinematic Prior:** Kalman-based inertia modeling.
+* **Global Optimization:** Minimize assignment cost to prevent identity switches.
 
-![Tracking Demo](https://github.com/user-attachments/assets/e51d8afc-254c-4141-bda0-33e45940fbdb)
+### 2. Deep Learning Architecture
+The forecasting module uses an autoregressive GRU (Gated Recurrent Unit) to map relative coordinates to future trajectories.
+* **Relative Centering:** Anchoring sequences at $p_t$ to ensure spatial invariance.
+* **Autoregressive Decoding:** Step-by-step prediction of future positional deltas.
 
----
-
-### 2. Neural Architecture: The Seq2Seq GRU
-We utilize a sequence-to-sequence GRU architecture to map relative projectile coordinates to future trajectories.
-
-![Architecture GRU](architecture.png)
-
-### 3. Physics-Informed Loss Formulation
-We engineered a custom composite objective, the **Sniper Horizon Loss**, to mathematically enforce physical realism:
-
+### 3. Physics-Informed Loss (Sniper Horizon Loss)
+We enforce physical realism by calculating the total loss as:
 $$\mathcal{L}_{\text{total}}=\mathcal{L}_{\text{traj}}+\mathcal{L}_{\text{terminal}}+\lambda_{\text{acc}}\mathcal{L}_{\text{acc}}$$
+This ensures the model respects constant-gravity parabolic motion.
 
 ---
 
-### 4. Performance & HUD
-The AI retro-engineers the underlying physical laws, yielding sub-pixel accuracy and projecting reliable "Lead Indicators" for 40+ simultaneous targets.
+### 4. Demonstrations (Watch on GitHub)
+If the player below does not load, use these direct links:
 
-![Full HUD System](https://github.com/user-attachments/assets/f32a3b89-02a1-4912-a816-164cd364745d)
+* **[Demo 1: Multi-Target Tracking Performance](https://github.com/user-attachments/assets/e51d8afc-254c-4141-bda0-33e45940fbdb)**
+* **[Demo 2: Full HUD Forecasting System](https://github.com/user-attachments/assets/f32a3b89-02a1-4912-a816-164cd364745d)**
 
 ---
 
-### 5. Conclusion & Availability
-The system is robust to occlusions and fully translation-invariant. 
-*Copyright & License: © 2026 [Raphael KHAYAT]. All Rights Reserved.*
+### 5. Contact & Copyright
+© 2026 [Raphael KHAYAT]. All Rights Reserved.
+*For professional inquiries, source code and training architecture are available upon request during technical interviews.*
