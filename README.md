@@ -99,7 +99,7 @@ $$\mathcal{L}_{\text{acc}}=\mathbb{E}[\|a_t\|_2^2]$$
 
 $$\mathcal{L}_{\text{total}}=\mathcal{L}_{\text{traj}}+\mathcal{L}_{\text{terminal}}+\lambda_{\text{acc}}\mathcal{L}_{\text{acc}}$$
 
-![Full HUD System](<img width="1383" height="847" alt="thumbnail_hud" src="https://github.com/user-attachments/assets/0fafebe3-65e6-42f2-a339-fdff330c871d" />)
+![Full HUD System]([<img width="1383" height="847" alt="thumbnail_hud" src="https://github.com/user-attachments/assets/0fafebe3-65e6-42f2-a339-fdff330c871d" />](https://github.com/RaphaelKha/ballistic-trajectory-forecasting/blob/main/thumbnail_hud.png?raw=true))
 
 
 *The ultimate demonstration. The AI successfully retro-engineers the underlying physical laws, yielding sub-pixel forecasting accuracy and projecting reliable "Lead Indicators" (Blue/Red targets) for 40+ simultaneous projectiles.*
