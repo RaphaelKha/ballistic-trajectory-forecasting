@@ -104,7 +104,7 @@ To prove these aren't just pretty equations, let's look at the training dynamics
 **4.5 Qualitative Demonstration (Real-Time HUD)**
 
 ![Full HUD System](https://github.com/RaphaelKha/ballistic-trajectory-forecasting/blob/main/thumbnail_hud.png?raw=true)
-*The ultimate demonstration. The AI successfully retro-engineers the underlying physical laws, yielding sub-pixel forecasting accuracy and projecting reliable "Lead Indicators" (Blue/Red targets) for 40+ simultaneous projectiles.*
+*The ultimate demonstration. The AI successfully retro-engineers the underlying physical laws, yielding sub-pixel forecasting accuracy and projecting reliable "Lead Indicators" (Yellow/Red targets) for 40+ simultaneous projectiles.*
 
 ---
 
