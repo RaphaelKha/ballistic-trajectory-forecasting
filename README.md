@@ -73,7 +73,7 @@ For the forecasting phase, the model operates autoregressively over the predicti
 * 🌍 **Postprocessing:** `[Absolute Re-anchoring]`
 * 📤 **Output:** `[Future Trajectory 30x2]`
 
-
+```mermaid
 graph LR
     %% Styling
     classDef input fill:#f8f9fa,stroke:#dee2e6,stroke-width:2px,color:#212529;
@@ -95,56 +95,107 @@ graph LR
     Bot -->|Kinematic Memory| Dec
     Dec -->|Sub-pixel Prediction| Out
     Dec -.->|Feedback Loop| Dec
----
+```
 
 ### 4. Physics-Informed Custom Loss Formulation
+
 Standard regression metrics like Mean Squared Error (MSE) treat all positional errors equally. However, ballistic forecasting requires specific kinematic constraints. We engineered a custom composite objective, the Sniper Horizon Loss, to mathematically enforce physical realism.
 
+
+
 **4.1 Temporally-Weighted Trajectory Loss ($\mathcal{L}_{\text{traj}}$)**
+
 We apply a linearly increasing temporal weight vector $w_t$ to the MAE of the trajectory, prioritizing the structural integrity of the long-term curve.
+
+
 
 $$\mathcal{L}_{\text{traj}}=\frac{1}{N}\sum_{t=1}^{N}w_t\|\hat{p}_t-p_t\|_1$$
 
+
+
 **4.2 Terminal Impact Loss ($\mathcal{L}_{\text{terminal}}$)**
+
 We apply an extreme penalty multiplier $\lambda_{\text{term}}$ to the final frame prediction error to guarantee precise impact coordinate acquisition.
+
+
 
 $$\mathcal{L}_{\text{terminal}}=\lambda_{\text{term}}\|\hat{p}_N-p_N\|_1$$
 
+
+
 **4.3 Kinematic Acceleration Penalty ($\mathcal{L}_{\text{acc}}$)**
+
 We penalize the variance of the predicted acceleration $a_t$, ensuring a smooth flight path dictated by constant gravity.
+
+
 
 $$\mathcal{L}_{\text{acc}}=\mathbb{E}[\|a_t\|_2^2]$$
 
+
+
 **Final Objective:**
+
+
 
 $$\mathcal{L}_{\text{total}}=\mathcal{L}_{\text{traj}}+\mathcal{L}_{\text{terminal}}+\lambda_{\text{acc}}\mathcal{L}_{\text{acc}}$$
 
+
+
 **4.4 Quantitative Convergence**
+
 The model rapidly breaches the critical threshold, settling at an impressive **0.49 px** terminal error rate:
 
+
+
 ![Training Loss and Accuracy](https://github.com/RaphaelKha/ballistic-trajectory-forecasting/blob/main/fitting_loss_settings.png?raw=true)
+
 *Left: The logarithmic descent of the Sniper Horizon Loss. Right: The terminal impact error converging below the sub-pixel threshold.*
+
+
 
 ---
 
+
+
 ### 5 Hardware Specifications & Edge Deployment (Artifacts)
+
 To guarantee convergence and inference speed, the system was built with Edge Computing constraints in mind.
 
+
+
 * **Hardware Infrastructure:** NVIDIA A100 (Ampere architecture).
+
 * **Convergence Time:** Less than 20 minutes for 400 epochs, enabled by AdamW optimization and a fully vectorized DataLoader containing 20,000 synthetic trajectories. Crucially, this is a one-time offline learning cost to achieve permanent sub-pixel accuracy.
+
 * **The AI Artifact (`.pth`):** The final exported model weights contain only the learned synaptic `state_dict`. 
+
 * **Storage Footprint:** **~1.5 MB**.
+
+
 
 **Impact:** This Ultra-Lightweight memory footprint allows the model to be natively embedded on field micro-calculators (e.g., autonomous sports broadcasting cameras, smart golf flight trackers) yielding zero-latency, 1000+ FPS real-time inference without reliance on cloud compute.
 
+
+
 ---
+
+
 
 ### Conclusion
+
 By embedding kinematic constraints directly into the loss landscape and utilizing an SSM/VideoMamba-inspired sequence architecture paired with an optimal assignment tracker, the system transcends simple pattern matching. It is robust to occlusions, fully translation-invariant, and highly scalable for real-time defense or acquisition systems.
+
+
 
 ---
 
+
+
 ### Copyright & License
+
 © 2026 Raphael KHAYAT. All Rights Reserved.
 
-*This repository and its documentation are provided for portfolio and demonstration purposes only. To protect intellectual property, the source code, training pipeline, and model weights are maintained in a separate private repository. A full code walkthrough and live demonstration can be provided upon request during technical interviews. No license is granted to use, copy, modify, or distribute this software.*
+
+
+*This repository and its documentation are provided for portfolio and demonstration purposes only. To protect intellectual property, the source code, training pipeline, and model weights are maintained in a separate private repository. A full code walkthrough and live demonstration can be provided upon request during technical interviews. No license is granted to use, copy, modify, or distribute this software.* 
+
