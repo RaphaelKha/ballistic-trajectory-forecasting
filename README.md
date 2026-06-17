@@ -73,6 +73,28 @@ For the forecasting phase, the model operates autoregressively over the predicti
 * 🌍 **Postprocessing:** `[Absolute Re-anchoring]`
 * 📤 **Output:** `[Future Trajectory 30x2]`
 
+
+graph LR
+    %% Styling
+    classDef input fill:#f8f9fa,stroke:#dee2e6,stroke-width:2px,color:#212529;
+    classDef encoder fill:#e7f5ff,stroke:#339af0,stroke-width:2px,color:#000000;
+    classDef latent fill:#ebfbee,stroke:#51cf66,stroke-width:2px,color:#000000;
+    classDef decoder fill:#f3f0ff,stroke:#845ef7,stroke-width:2px,color:#000000;
+    classDef output fill:#fff5f5,stroke:#ff6b6b,stroke-width:2px,color:#000000;
+
+    %% Nodes
+    In["Input Sequence<br/>(30 x 2)"]:::input
+    Enc["GRU Encoder<br/>(Past Feature Extraction)"]:::encoder
+    Bot(("Hidden State<br/>(256-dim Bottleneck)")):::latent
+    Dec["GRU Decoder<br/>(Autoregressive)"]:::decoder
+    Out["Future Trajectory<br/>(30 x 2)"]:::output
+
+    %% Connections
+    In -->|Historical Dynamics| Enc
+    Enc -->|Compression| Bot
+    Bot -->|Kinematic Memory| Dec
+    Dec -->|Sub-pixel Prediction| Out
+    Dec -.->|Feedback Loop| Dec
 ---
 
 ### 4. Physics-Informed Custom Loss Formulation
