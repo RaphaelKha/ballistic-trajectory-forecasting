@@ -113,7 +113,7 @@ To guarantee convergence and inference speed, the system was built with Edge Com
 * **The AI Artifact (`.pth`):** The final exported model weights contain only the learned synpatic `state_dict`. 
 * **Storage Footprint:** **~1.5 MB**.
 
-**Impact:** This Ultra-Lightweight memory footprint allows the model to be natively embedded on field micro-calculators (e.g., AA Turrets, Drones) yielding zero-latency, 1000+ FPS real-time inference without reliance on cloud compute.
+**Impact:** This Ultra-Lightweight memory footprint allows the model to be natively embedded on field micro-calculators (e.g., autonomous sports broadcasting cameras, smart golf flight trackers) yielding zero-latency, 1000+ FPS real-time inference without reliance on cloud compute.
 
 ---
 
