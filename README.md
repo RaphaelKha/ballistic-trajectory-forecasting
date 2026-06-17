@@ -105,12 +105,12 @@ The model rapidly breaches the critical threshold, settling at an impressive **0
 
 ---
 
-### 5. Hardware Specifications & Edge Deployment (Artifacts)
+### 5 Hardware Specifications & Edge Deployment (Artifacts)
 To guarantee convergence and inference speed, the system was built with Edge Computing constraints in mind.
 
-* **Hardware Hardware:** NVIDIA A100 (Ampere architecture).
-* **Convergence Time:** < 5 minutes for 400 epochs, enabled by AdamW optimization and a fully vectorized DataLoader containing 20,000 synthetic trajectories.
-* **The AI Artifact (`.pth`):** The final exported model weights contain only the learned synpatic `state_dict`. 
+* **Hardware Infrastructure:** NVIDIA A100 (Ampere architecture).
+* **Convergence Time:** Less than 20 minutes for 400 epochs, enabled by AdamW optimization and a fully vectorized DataLoader containing 20,000 synthetic trajectories. Crucially, this is a one-time offline learning cost to achieve permanent sub-pixel accuracy.
+* **The AI Artifact (`.pth`):** The final exported model weights contain only the learned synaptic `state_dict`. 
 * **Storage Footprint:** **~1.5 MB**.
 
 **Impact:** This Ultra-Lightweight memory footprint allows the model to be natively embedded on field micro-calculators (e.g., autonomous sports broadcasting cameras, smart golf flight trackers) yielding zero-latency, 1000+ FPS real-time inference without reliance on cloud compute.
