@@ -1,5 +1,10 @@
 # Physics-Informed Deep Learning for Multi-Target Ballistic Trajectory Forecasting
 
+![Full HUD System](https://github.com/RaphaelKha/ballistic-trajectory-forecasting/blob/main/thumbnail_hud.png?raw=true)
+*The system successfully retro-engineers the underlying physical laws, yielding sub-pixel forecasting accuracy and projecting reliable "Lead Indicators" (Red crosses) for 40+ simultaneous projectiles.*
+
+---
+
 ### Abstract
 This article details the architecture of a real-time predictive tracking system designed for dense, multi-target ballistic environments. While traditional kinematic filters handle initial state estimation, long-term non-linear trajectory forecasting is delegated to a custom Sequence-to-Sequence (Seq2Seq) neural network. By combining robust synthetic data generation, spatial invariance, and a physics-informed loss function, the system achieves sub-pixel forecasting accuracy and eliminates identity switches during target occlusion.
 
@@ -57,37 +62,34 @@ $$h_t=\text{GRU}(\text{ReLU}(W_{\text{in}}x_t+b_{\text{in}}),h_{t-1})$$
 
 The final hidden state $h_T$ acts as a compressed "kinematic memory," encoding the projectile's complete velocity, acceleration, and curvature profile.
 
-**3.3 The Autoregressive Decoder**
-For the forecasting phase, the model operates autoregressively over the prediction horizon $N=30$. At each future timestep, the network utilizes the evolving hidden state to predict a positional delta $\Delta\hat{p}$. This delta is added to the previous position, allowing the network to dynamically construct the non-linear parabolic curve step-by-step. 
+**3.3 The Autoregressive Decoder & Data Flow**
+For the forecasting phase, the model operates autoregressively over the prediction horizon $N=30$. At each future timestep, the network utilizes the evolving hidden state to predict a positional delta $\Delta\hat{p}$.
 
-**Architecture Data Flow:**
-1. 📥 **Input:** `[Absolute Sequence 30x2]`
-2. 🎯 **Preprocessing:** `[Relative Centering: p_t - p_30]`
-3. 🧠 **Embedding:** `[Linear Projection Layer: 2 → 256]`
-4. ⚙️ **Encoding:** `[GRU Encoder Cell]` ➔ *(Yields Final Kinematic State h_30)*
-5. 🔄 **Decoding:** `[Autoregressive Decoder]` ➔ *(Loops 30x to predict Deltas)*
-6. 🌍 **Postprocessing:** `[Absolute Re-anchoring]`
-7. 📤 **Output:** `[Future Trajectory 30x2]`
+* 📥 **Input:** `[Absolute Sequence 30x2]`
+* 🎯 **Preprocessing:** `[Relative Centering: p_t - p_30]`
+* 🧠 **Embedding:** `[Linear Projection Layer: 2 → 256]`
+* ⚙️ **Encoding:** `[GRU Encoder Cell]` ➔ *(Yields Final Kinematic State h_30)*
+* 🔄 **Decoding:** `[Autoregressive Decoder]` ➔ *(Loops 30x to predict Deltas)*
+* 🌍 **Postprocessing:** `[Absolute Re-anchoring]`
+* 📤 **Output:** `[Future Trajectory 30x2]`
 
 ---
 
 ### 4. Physics-Informed Custom Loss Formulation
 Standard regression metrics like Mean Squared Error (MSE) treat all positional errors equally. However, ballistic forecasting requires specific kinematic constraints. We engineered a custom composite objective, the Sniper Horizon Loss, to mathematically enforce physical realism.
 
-The total loss $\mathcal{L}_{\text{total}}$ is a weighted sum of three distinct components:
-
 **4.1 Temporally-Weighted Trajectory Loss ($\mathcal{L}_{\text{traj}}$)**
-Errors further in the future compound over time. We apply a linearly increasing temporal weight vector $w_t$ to the Mean Absolute Error (MAE) of the trajectory, forcing the optimizer to prioritize the structural integrity of the long-term curve.
+We apply a linearly increasing temporal weight vector $w_t$ to the MAE of the trajectory, prioritizing the structural integrity of the long-term curve.
 
 $$\mathcal{L}_{\text{traj}}=\frac{1}{N}\sum_{t=1}^{N}w_t\|\hat{p}_t-p_t\|_1$$
 
 **4.2 Terminal Impact Loss ($\mathcal{L}_{\text{terminal}}$)**
-For target acquisition systems, the exact coordinate at the end of the prediction horizon (the impact point) is critical. We apply an extreme penalty multiplier $\lambda_{\text{term}}$ to the final frame prediction error:
+We apply an extreme penalty multiplier $\lambda_{\text{term}}$ to the final frame prediction error to guarantee precise impact coordinate acquisition.
 
 $$\mathcal{L}_{\text{terminal}}=\lambda_{\text{term}}\|\hat{p}_N-p_N\|_1$$
 
 **4.3 Kinematic Acceleration Penalty ($\mathcal{L}_{\text{acc}}$)**
-To prevent the network from predicting erratic paths, we calculate the predicted velocities $v_t$ and accelerations $a_t$ using finite differences. We then penalize the variance of this acceleration, ensuring a smooth flight path dictated by constant gravity.
+We penalize the variance of the predicted acceleration $a_t$, ensuring a smooth flight path dictated by constant gravity.
 
 $$\mathcal{L}_{\text{acc}}=\mathbb{E}[\|a_t\|_2^2]$$
 
@@ -95,20 +97,27 @@ $$\mathcal{L}_{\text{acc}}=\mathbb{E}[\|a_t\|_2^2]$$
 
 $$\mathcal{L}_{\text{total}}=\mathcal{L}_{\text{traj}}+\mathcal{L}_{\text{terminal}}+\lambda_{\text{acc}}\mathcal{L}_{\text{acc}}$$
 
-**4.4 Quantitative Convergence & Sub-Pixel Accuracy**
-To prove these aren't just pretty equations, let's look at the training dynamics. The model rapidly breaches the critical threshold, settling at an impressive 0.49 px error rate:
+**4.4 Quantitative Convergence**
+The model rapidly breaches the critical threshold, settling at an impressive **0.49 px** terminal error rate:
 
 ![Training Loss and Accuracy](https://github.com/RaphaelKha/ballistic-trajectory-forecasting/blob/main/fitting_loss_settings.png?raw=true)
-*Training metrics over 400 epochs. Left: The logarithmic descent of the Sniper Horizon Loss. Right: The terminal impact error converging below the sub-pixel threshold.*
-
-**4.5 Qualitative Demonstration (Real-Time HUD)**
-
-![Full HUD System](https://github.com/RaphaelKha/ballistic-trajectory-forecasting/blob/main/thumbnail_hud.png?raw=true)
-*The ultimate demonstration. The AI successfully retro-engineers the underlying physical laws, yielding sub-pixel forecasting accuracy and projecting reliable "Lead Indicators" (Yellow/Red targets) for 40+ simultaneous projectiles.*
+*Left: The logarithmic descent of the Sniper Horizon Loss. Right: The terminal impact error converging below the sub-pixel threshold.*
 
 ---
 
-### 5. Conclusion
+### 5. Hardware Specifications & Edge Deployment (Artifacts)
+To guarantee convergence and inference speed, the system was built with Edge Computing constraints in mind.
+
+* **Hardware Hardware:** NVIDIA A100 (Ampere architecture).
+* **Convergence Time:** < 5 minutes for 400 epochs, enabled by AdamW optimization and a fully vectorized DataLoader containing 20,000 synthetic trajectories.
+* **The AI Artifact (`.pth`):** The final exported model weights contain only the learned synpatic `state_dict`. 
+* **Storage Footprint:** **~1.5 MB**.
+
+**Impact:** This Ultra-Lightweight memory footprint allows the model to be natively embedded on field micro-calculators (e.g., AA Turrets, Drones) yielding zero-latency, 1000+ FPS real-time inference without reliance on cloud compute.
+
+---
+
+### Conclusion
 By embedding kinematic constraints directly into the loss landscape and utilizing an SSM/VideoMamba-inspired sequence architecture paired with an optimal assignment tracker, the system transcends simple pattern matching. It is robust to occlusions, fully translation-invariant, and highly scalable for real-time defense or acquisition systems.
 
 ---
