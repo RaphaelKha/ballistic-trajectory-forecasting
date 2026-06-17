@@ -160,7 +160,8 @@ Because standard average metrics are highly vulnerable to extreme spatial tracki
 * **High-Precision Inlier Rate (< 10px):** 66.67% of total trajectories
 * **Overall Sequence Accuracy Rate:** 0.753111
 
-![FDE (Final Displacement Error) Distribution](fde_distribution_readme.png)
+<img width="1762" height="1276" alt="image" src="https://github.com/user-attachments/assets/5179afd6-1db3-43e8-ad3f-ef888ee0b531" />
+
 
 The spatial convergence plot demonstrates a heavy left-skewed distribution, confirming that over two-thirds of the network's long-term predictions fall within a strict operational window (< 10px). The residual right-tail variance (skewing the Mean to 12.34 px) does not stem from synaptic failure, but represents explicit edge boundary conditions induced by tracking truncations at canvas exits.
 
