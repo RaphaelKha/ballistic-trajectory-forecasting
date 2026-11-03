@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+logs/
+.DS_Store
+.ipynb_checkpoints/
+graphify-out/
+# original prototype notebooks stay private
+notebooks/
+# keep trained checkpoints (small) and generated assets/results in the repo

@@ -1,0 +1,11 @@
+model: gru
+model_kwargs:
+  hidden_dim: 256
+epochs: 30
+samples_per_epoch: 48000
+batch_size: 256
+lr: 2.0e-3
+window:
+  obs_len: 30   # 1 s of history at 30 fps
+  pred_len: 30  # 1 s into the future
+  noise_px: 1.0

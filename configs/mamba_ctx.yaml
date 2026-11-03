@@ -1,0 +1,17 @@
+# Ablation: larger initial SSM step size + present-state context on the future queries.
+model: mamba
+run_name: mamba_ctx
+model_kwargs:
+  d_model: 64
+  n_layers: 4
+  d_state: 16
+  dt_range: [0.01, 0.5]
+  context_queries: true
+epochs: 30
+samples_per_epoch: 48000
+batch_size: 256
+lr: 2.0e-3
+window:
+  obs_len: 30
+  pred_len: 30
+  noise_px: 1.0
